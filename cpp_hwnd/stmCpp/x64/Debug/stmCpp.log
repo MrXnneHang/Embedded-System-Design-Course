@@ -1,4 +1,4 @@
 ﻿  main.cpp
-D:\program\stmCpp\stmCpp\main.cpp(41,29): warning C4244: “=”: 从“LRESULT”转换到“int”，可能丢失数据
-D:\program\stmCpp\stmCpp\main.cpp(25,13): warning C4101: “windowText”: 未引用的局部变量
-  stmCpp.vcxproj -> D:\program\stmCpp\x64\Debug\stmCpp.exe
+D:\program\stm32\cpp_hwnd\stmCpp\main.cpp(42,29): warning C4244: “=”: 从“LRESULT”转换到“int”，可能丢失数据
+D:\program\stm32\cpp_hwnd\stmCpp\main.cpp(26,13): warning C4101: “windowText”: 未引用的局部变量
+  stmCpp.vcxproj -> D:\program\stm32\cpp_hwnd\x64\Debug\stmCpp.exe
