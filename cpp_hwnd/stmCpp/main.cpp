@@ -2,8 +2,10 @@
 #include <windows.h>
 #include <vector>
 #include <string>
-#include <fcntl.h> // for _O_U16TEXT
+#include <fcntl.h> // for _O_U8TEXT
 #include <io.h> // for _setmode
+#include <thread>
+#include <chrono>
 
 // 回调函数用于收集子窗口句柄
 BOOL CALLBACK EnumChildWindowsProc(HWND hwnd, LPARAM lParam) {
@@ -18,8 +20,10 @@ void TypeTextInTextBox(HWND hwndTextBox, LPCWSTR text) {
 
     // 发送文本到文本框
     SendMessage(hwndTextBox, WM_SETTEXT, 0, (LPARAM)text);
-}
 
+    // 延迟 500 毫秒
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+}
 
 void PrintWindowInfo(HWND hwnd) {
     wchar_t className[256];
@@ -45,10 +49,7 @@ void PrintWindowInfo(HWND hwnd) {
     }
 
     // 打印信息
-    //std::wcout << L"窗口句柄: " << hwnd << std::endl;
-    //std::wcout << L"类名: " << className << std::endl;
     std::wcout << text << std::endl;
-    //std::wcout << L"样式: " << std::hex << style << std::endl;
     std::wcout << L"--------------------------" << std::endl;
 }
 
@@ -65,18 +66,24 @@ HWND FindChildWindowByTitle(HWND parent, const std::wstring& title) {
     return NULL;
 }
 
-int main() {
-    // 设置控制台以支持 Unicode
-    _setmode(_fileno(stdout), _O_U16TEXT);
+int wmain(int argc, wchar_t* argv[]) {
+    // 设置控制台以支持 UTF-8
+    _setmode(_fileno(stdout), _O_U8TEXT);
+
+    if (argc != 2) {
+        std::wcerr << L"Usage: " << argv[0] << L" <text_to_type>" << std::endl;
+        return 1;
+    }
+
+    // 获取传入的文本
+    std::wstring textToType = argv[1];
+    bool shouldTypeText = !textToType.empty();
 
     // 获取父窗口句柄
     HWND hwndParent = FindWindow(NULL, TEXT("正点原子串口调试助手 V2.8"));
     if (hwndParent == NULL) {
         std::wcerr << L"未找到父窗口" << std::endl;
         return 1;
-    }
-    else {
-        //std::wcout << L"找到父窗口\n";
     }
 
     std::vector<HWND> childWindows;
@@ -87,8 +94,6 @@ int main() {
         return 1;
     }
 
-    //std::wcout << L"找到子窗口数量: " << childWindows.size() << std::endl;
-
     // 查找具有指定样式的子窗口
     DWORD targetStyle = 0x56210044; // 要查找的子窗口样式
     HWND hwndTextBox = NULL;
@@ -96,45 +101,42 @@ int main() {
     for (HWND hwnd : childWindows) {
         DWORD style = GetWindowLong(hwnd, GWL_STYLE);
         if (style == targetStyle) {
-            // 找到具有指定样式的子窗口（假设为文本框控件）
             hwndTextBox = hwnd;
             PrintWindowInfo(hwnd);
             break;
         }
     }
 
-    if (hwndTextBox == NULL) {
-        std::wcerr << L"未找到具有指定样式的子窗口" << std::endl;
-        return 1;
-    }
-    else {
-        //std::wcout << L"找到文本框\n";
+    if (shouldTypeText) {
+        if (hwndTextBox == NULL) {
+            std::wcerr << L"未找到具有指定样式的子窗口" << std::endl;
+            return 1;
+        }
+
+        // 输入文本到文本框并延迟
+        TypeTextInTextBox(hwndTextBox, textToType.c_str());
+
+        // 查找并触发 "发送" 按钮
+        HWND hwndSendButton = FindChildWindowByTitle(hwndParent, L"发送");
+        if (hwndSendButton) {
+            PrintWindowInfo(hwndSendButton);
+            SendMessage(hwndSendButton, BM_CLICK, 0, 0);
+        }
+        else {
+            std::wcerr << L"未找到发送按钮" << std::endl;
+        }
+
+        //// 查找并触发 "清除接收" 按钮
+        //HWND hwndClearButton = FindChildWindowByTitle(hwndParent, L"清除接收");
+        //if (hwndClearButton) {
+        //    PrintWindowInfo(hwndClearButton);
+        //    SendMessage(hwndClearButton, BM_CLICK, 0, 0);
+        //}
+        //else {
+        //    std::wcerr << L"未找到清除接收按钮" << std::endl;
+        //}
     }
 
-    // 输入文本到文本框
-    LPCWSTR textToType = L"efg"; // 要输入的文本
-    TypeTextInTextBox(hwndTextBox, textToType);
-
-    // 查找并触发 "清除接收" 按钮
-    HWND hwndClearButton = FindChildWindowByTitle(hwndParent, L"清除接收");
-    if (hwndClearButton) {
-        //PrintWindowInfo(hwndClearButton);
-        SendMessage(hwndClearButton, BM_CLICK, 0, 0);
-    }
-    else {
-        std::wcerr << L"未找到清除接收按钮" << std::endl;
-    }
-    // 查找并触发 "发送" 按钮
-    HWND hwndSendButton = FindChildWindowByTitle(hwndParent, L"发送");
-    if (hwndSendButton) {
-        //PrintWindowInfo(hwndSendButton);
-        SendMessage(hwndSendButton, BM_CLICK, 0, 0);
-    }
-    else {
-        std::wcerr << L"未找到发送按钮" << std::endl;
-    }
-
-    Sleep(300);
     // 查找具有另一个指定样式的子窗口（输出框）
     DWORD targetStyle1 = 0x562108C4;
     DWORD targetStyle2 = 0x560108C4;
@@ -152,9 +154,6 @@ int main() {
     if (hwndOutputBox == NULL) {
         std::wcerr << L"未找到具有指定样式的输出框" << std::endl;
         return 1;
-    }
-    else {
-        //std::wcout << L"找到输出框\n";
     }
 
     return 0;
