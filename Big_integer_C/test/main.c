@@ -26,10 +26,7 @@
 //char binaryExp[SIZE + 1]; char D[SIZE + 1]; char result[SIZE + 1]; char m[SIZE + 1];
 //
 //
-//// 返回两者较大值
-//int max(int a, int b) {
-//    return (a > b) ? a : b;
-//}
+//
 //
 //// 将数组设置为0
 //void setZero(int* num, int len) {

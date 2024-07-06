@@ -320,7 +320,7 @@ char* power(char* base, char* exp) {
 
 
 
- //辅助函数：将十进制字符串除以 2
+//辅助函数：将十进制字符串除以 2
 void divideByTwo(char* num, char* result) {
     int len = strlen(num);
     int carry = 0;
@@ -333,7 +333,7 @@ void divideByTwo(char* num, char* result) {
 
     result[len] = '\0';
 
-     //移除前导零
+    //移除前导零
     int start = 0;
     while (result[start] == '0' && result[start + 1] != '\0') {
         start++;
@@ -341,7 +341,7 @@ void divideByTwo(char* num, char* result) {
     memmove(result, result + start, len - start + 1);
 }
 
- //辅助函数：检查字符串是否为零
+//辅助函数：检查字符串是否为零
 int isZero(const char* num) {
     while (*num) {
         if (*num != '0') {
@@ -351,23 +351,23 @@ int isZero(const char* num) {
     }
     return 1;
 }
- //十进制字符转换成二进制
+//十进制字符转换成二进制
 static char* decimalToBinary(const char* num, int bits) {
-     //分配足够大的空间来存储二进制字符串
+    //分配足够大的空间来存储二进制字符串
     char* binaryString = (char*)malloc(bits + 1);
     if (binaryString == NULL) {
         return NULL; // 内存分配失败
     }
     binaryString[bits] = '\0'; // 字符串结尾符
 
-     //复制输入字符串，因为我们会修改它
+    //复制输入字符串，因为我们会修改它
     char* tempNum = strdup(num);
     if (tempNum == NULL) {
         free(binaryString);
         return NULL; // 内存分配失败
     }
 
-     //从最低位开始填充二进制字符串
+    //从最低位开始填充二进制字符串
     for (int i = bits - 1; i >= 0; i--) {
         if (isZero(tempNum)) {
             binaryString[i] = '0'; // 如果已经为零，填充剩余位
@@ -376,7 +376,7 @@ static char* decimalToBinary(const char* num, int bits) {
             int lastDigit = (tempNum[strlen(tempNum) - 1] - '0') % 2;
             binaryString[i] = lastDigit ? '1' : '0'; // 获取最低位的二进制位
 
-             //将十进制字符串除以 2
+            //将十进制字符串除以 2
             char* dividedNum = (char*)malloc(strlen(tempNum) + 1);
             if (dividedNum == NULL) {
                 free(binaryString);
@@ -393,32 +393,31 @@ static char* decimalToBinary(const char* num, int bits) {
     return binaryString;
 }
 char* fastpowermod(char* base, const char* binaryexp, char* m) {
-     //初始化结果为 "1"
+    //初始化结果为 "1"
     char* result = (char*)malloc(2 * sizeof(char));
     result[0] = '1';
     result[1] = '\0';
-    result = mod(base, m);
-     //复制 base 以便进行幂运算
+    //复制 base 以便进行幂运算
     char* tempBase = strdup(base);
     int len = strlen(binaryexp);
 
-     //遍历二进制指数的每一位
+    //遍历二进制指数的每一位
     for (int i = 0; i < len; i++) {
-         //如果当前二进制位为 '1'，将结果乘以当前的 base
+        //如果当前二进制位为 '1'，将结果乘以当前的 base
         if (binaryexp[len - 1 - i] == '1') {
             char* newResult = multiply(result, tempBase);
             newResult = mod(newResult, m);
             free(result);
             result = newResult;
         }
-         //base 自身相乘
+        //base 自身相乘
         char* newBase = multiply(tempBase, tempBase);
         newBase = mod(newBase, m);
         free(tempBase);
         tempBase = newBase;
     }
 
-     //释放临时变量
+    //释放临时变量
     free(tempBase);
     return result;
 }
@@ -468,12 +467,11 @@ int main() {
     strcpy(num2, "45654");
     strcpy(m, "1000");
     bits = strlen(num2) * 4;
-    strcpy(binaryExp,decimalToBinary(num2, bits));
-    strcpy(binaryExp,removeLeadingZeros(binaryExp));
+    strcpy(binaryExp, decimalToBinary(num2, bits));
+    strcpy(binaryExp, removeLeadingZeros(binaryExp));
     printf("Binary:%s\n", binaryExp);
     strcpy(result, fastpowermod(num1, binaryExp, m));
     printf("Fast Power Modulo: %s^%s %% %s = %s\n", num1, num2, m, removeLeadingZeros(result));
 
     return 0;
 }
-
