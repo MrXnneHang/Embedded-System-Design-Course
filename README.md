@@ -6,9 +6,10 @@
 
 ## 项目结构
 
-- `cpp_code/`: 包含Windows PC应用程序的C++代码。
-- `c_code/`: 包含STM32F047ZG开发板程序的C代码。
-- `docs/`: 项目相关文档。
+- `HWND_CPP/`: 包含Windows PC应用程序的C++代码。用来掏空串口调试助手输入输出框和发送按钮，免去写串口通信。
+- `Big_integer_C/`: 包含大数运算的C语言实现，malloc_main.c是应用malloc动态分配内存的，由于32不支持改成了main.c中全局数组声明的格式。
+- `keil_stm32f4_C/`:这里只提供了将大数验算打印到串口调试助手的C代码。
+- pycommunicate_PY/:提供简单的WebUI，封装了从C++ 那里调用WIndowsAPI得到的串口调试助手功能。
 - `README.md`: 提供项目概述的文件。
 
 ## 项目要求

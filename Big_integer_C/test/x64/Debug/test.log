@@ -1,0 +1,18 @@
+﻿  main_malloc.cpp
+D:\program\stm32\test\test\main_malloc.cpp(38,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(39,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(64,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(64,35): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(91,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(91,35): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(152,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(152,35): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(186,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(186,35): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(247,14): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(247,35): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(325,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(403,13): warning C4267: “初始化”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(470,25): warning C4267: “=”: 从“size_t”转换到“int”，可能丢失数据
+D:\program\stm32\test\test\main_malloc.cpp(435,51): warning C4101: “exp”: 未引用的局部变量
+  test.vcxproj -> D:\program\stm32\test\x64\Debug\test.exe
